@@ -6,7 +6,7 @@ class Posts {
         this.baseURL = baseURL;
     }
 
-    async getCurrentFeed(parseInfo) {
+    async getCurrentFeed(parseInfo = "XHR") {
         try {
             return QuickRequest(`${this.baseURL}feed`).then((response) => {
                 if (parseInfo == "JSON") {

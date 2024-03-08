@@ -1,21 +1,12 @@
 declare module "cms-sekolahku-api" {
-    export class CMSSekolahku {
-        /**
-         * @param {string} baseURL A URL to the website that uses CMS Sekolahku software to run the website
-         */
-        constructor(baseURL: string)
-
-        posts: Posts
-    }
-
     export class Posts {
         /**
          * Get current page feed (Newest posts)
          * 
-         * @param {parseInfo} parseInfo How the information will be parsed
-         * @returns {string | XMLJSON}
+         * @param {"XHR" | "JSON" | null} parseInfo How the information will be parsed
+         * @returns {string}
          */
-        getCurrentFeed(parseInfo: ParseInfo): Promise<string | XMLJSON>
+        getCurrentFeed(parseInfo: "XHR" | "JSON" | null): Promise<string>
 
         /**
          * Get all post on a specific category
@@ -107,6 +98,4 @@ declare module "cms-sekolahku-api" {
         message: string,
         status: string
     }
-
-    export interface XMLJSON {}
 }
