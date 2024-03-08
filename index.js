@@ -46,7 +46,7 @@ class Posts {
                 "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
                 "x-requested-with": "XMLHttpRequest",
             }).then((response) => {
-                return buildPostRows(response.data)
+                return buildPostRows(this.baseURL, response.data)
             })
         } catch(err) { throw err }
     }
@@ -56,11 +56,43 @@ class Comments {
     constructor(baseURL) {
         this.baseURL = baseURL
     }
+
+    async getPostComments(post_id, page_number = 1) {
+        try {
+            return QuickRequest(`${this.baseURL}public/post_comments/get_post_comments`, "POST", { "page_number": page_number, "comment_post_id": post_id }, {
+                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "x-requested-with": "XMLHttpRequest",
+            }).then((response) => {
+                return response.data
+            })
+        } catch(err) { throw err }
+    }
+
+    async postComment(post_id, author, email, url, content) {
+        try {
+            return QuickRequest(`${this.baseURL}public/post_comments`, "POST", { 
+                "comment_author": author, 
+                "comment_email": email,
+                "comment_url": url,
+                "comment_content": content,
+                "comment_post_id": post_id 
+            }, {
+                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "x-requested-with": "XMLHttpRequest",
+            }).then((response) => {
+                if (!response.data.status == "success") {
+                    throw new Error(`An error has occured while trying to post a comment (${response.data.status}): "${response.data.message}"`)
+                }
+                
+                return response.data
+            })
+        } catch(err) { throw err }
+    }
 }
 
-function buildPostRows(data) {
+function buildPostRows(baseURL, data) {
     data.rows.forEach(postInfo => {
-        postInfo.post_link = `${this.baseURL}read/${postInfo.id}/${postInfo.post_slug}`;
+        postInfo.post_url = `${baseURL}read/${postInfo.id}/${postInfo.post_slug}`;
     });
 
     return data
@@ -70,4 +102,7 @@ function QuickRequest(url, method, body, headers) {
     return axios.default.request({ url: url, method: method, data: body, headers: headers })
 }
 
-module.exports = { Posts }
+module.exports = { 
+    Posts,
+    Comments
+}

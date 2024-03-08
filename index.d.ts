@@ -46,9 +46,32 @@ declare module "cms-sekolahku-api" {
         getPostsByArchives(year: string, month: string, page_number: number?): Promise<PostRows>
     }
 
+    export class Comments {
+        /**
+         * Get all comments on a post in a specific page number
+         * 
+         * @param {number} post_id The ID of the post
+         * @param {number} page_number Page number
+         * @returns { CommentRows }
+         */
+        getPostComments(post_id: number, page_number: number?): Promise<CommentRows>
+        
+        /**
+         * Posts a comment on a post
+         * 
+         * @param {number} post_id The ID of the post
+         * @param {string} author The author of the comment
+         * @param {string} email The author's email
+         * @param {string} url The author's URL
+         * @param {string} content The content of the comment
+         * @returns { ResponseStatus }
+         */
+        postComment(post_id: number, author: string, email: string, url: string, content: string): Promise<ResponseStatus>
+    }
+
     export enum ParseInfo {
-        "XHR" = "XHR",
-        "JSON" = "JSON"
+        XHR,
+        JSON
     }
     
     export interface PostRows {
@@ -64,7 +87,25 @@ declare module "cms-sekolahku-api" {
         post_slug: string,
         post_counter: number,
         post_author: string,
-        post_link: string
+        post_url: string
+    }
+
+    export interface CommentRows {
+        comments: [CommentInformation]
+    }
+
+    export interface CommentInformation {
+        id: number,
+        comment_author: string,
+        comment_url: string,
+        created_at: string,
+        comment_content: string,
+        comment_reply: null
+    }
+
+    export interface ResponseStatus {
+        message: string,
+        status: string
     }
 
     export interface XMLJSON {}
