@@ -10,7 +10,7 @@ declare module "cms-sekolahku-api" {
 
     export class Posts {
         /**
-         * Get current page feed
+         * Get current page feed (Newest posts)
          * 
          * @param {parseInfo} parseInfo How the information will be parsed
          * @returns { string | XMLJSON }
@@ -27,7 +27,7 @@ declare module "cms-sekolahku-api" {
         getPostsByCategories(category_slug: string, page_number: number?): Promise<PostRows>
 
         /**
-         * Get all post with a specific tag
+         * Get all post with a specific tag (straight up searching)
          * 
          * @param {string} tag The specified tag
          * @param {number} page_number Category page
