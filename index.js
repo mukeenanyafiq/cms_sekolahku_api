@@ -172,6 +172,20 @@ class Download {
     }
 }
 
+class Subscribe {
+    constructor(baseURL) {
+        this.baseURL = baseURL
+    }
+
+    async subscribe(csrf_token, subscriber) {
+        try {
+            return quickPostCMS(`${this.baseURL}public/subscribe`, { "csrf_token": csrf_token, "subscriber": subscriber }).then((response) => {
+                return response.data
+            })
+        } catch(err) { throw err }
+    }
+}
+
 function quickPostCMS(url, data) {
     return QuickRequest(url, "POST", data, {
         "content-type": "application/x-www-form-urlencoded",
@@ -215,5 +229,6 @@ module.exports = {
     Alumni,
     Employee,
     OpeningSpeech,
-    Download
+    Download,
+    Subscribe
 }

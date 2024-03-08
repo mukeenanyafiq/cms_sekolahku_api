@@ -140,6 +140,19 @@ declare module "cms-sekolahku-api" {
          */
         getFiles(slug: string, page_number: number?): Promise<DownloadFilesRows>
     }
+
+    export class Subscribe {
+        constructor(baseURL: string)
+
+        /**
+         * Subscribe to the website's latest post (if the website supports email-sending)
+         * 
+         * @param {string} csrf_token The CSRF Token (don't know what that means)
+         * @param {string} subscriber Subscriber email
+         * @returns {DownloadFilesRows}
+         */
+        subscribe(csrf_token: string, subscriber: string): Promise<DownloadFilesRows>
+    }
     
     export interface PostRows {
         rows: [PostInformation]
