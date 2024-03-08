@@ -11,7 +11,7 @@ class Posts {
         try {
             return QuickRequest(`${this.baseURL}feed`).then((response) => {
                 if (parseInfo == "JSON") {
-                    response.data = JSON.parse(xmljs.xml2json(response.data))
+                    response.data = JSON.parse(xmljs.xml2json(response.data, { compact: true }))
                 }
 
                 return response.data
