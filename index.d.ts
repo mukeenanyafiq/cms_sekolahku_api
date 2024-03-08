@@ -107,6 +107,15 @@ declare module "cms-sekolahku-api" {
         getAlumni(page_number: number?): Promise<StudentRows>
     }
 
+    export class OpeningSpeech {
+        /**
+         * Gets the headmaster's opening speech
+         * 
+         * @returns {string}
+         */
+        getOpeningSpeech(): Promise<string>
+    }
+
     export enum ParseInfo {
         XHR,
         JSON
