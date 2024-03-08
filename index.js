@@ -158,6 +158,20 @@ class OpeningSpeech {
     }
 }
 
+class Download {
+    constructor(baseURL) {
+        this.baseURL = baseURL
+    }
+
+    async getFiles(slug, page_number = 1) {
+        try {
+            return quickPostCMS(`${this.baseURL}public/download/get_files`, { "slug": slug, "page_number": page_number }).then((response) => {
+                return response.data
+            })
+        } catch(err) { throw err }
+    }
+}
+
 function quickPostCMS(url, data) {
     return QuickRequest(url, "POST", data, {
         "content-type": "application/x-www-form-urlencoded",
@@ -200,5 +214,6 @@ module.exports = {
     Student,
     Alumni,
     Employee,
-    OpeningSpeech
+    OpeningSpeech,
+    Download
 }

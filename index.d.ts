@@ -1,5 +1,7 @@
 declare module "cms-sekolahku-api" {
     export class Posts {
+        constructor(baseURL: string)
+
         /**
          * Get current page feed (Newest posts)
          * 
@@ -38,6 +40,8 @@ declare module "cms-sekolahku-api" {
     }
 
     export class Comments {
+        constructor(baseURL: string)
+
         /**
          * Get all comments on a post in a specific page number
          * 
@@ -61,6 +65,8 @@ declare module "cms-sekolahku-api" {
     }
 
     export class Gallery {
+        constructor(baseURL: string)
+
         /**
          * Get photo albums on the website
          * 
@@ -87,27 +93,33 @@ declare module "cms-sekolahku-api" {
     }
 
     export class Student {
+        constructor(baseURL: string)
+
         /**
          * Gets all student information
          * 
-         * @param academic_year_id The academic year ID
-         * @param class_group_id The class group ID
+         * @param {number} academic_year_id The academic year ID
+         * @param {number} class_group_id The class group ID
          * @returns {StudentRows}
          */
         getStudents(academic_year_id: number?, class_group_id: number?): Promise<StudentRows>
     }
 
     export class Alumni {
+        constructor(baseURL: string)
+
         /**
          * Gets all alumni student information
          * 
-         * @param page_number Page number
+         * @param {number} page_number Page number
          * @returns {StudentRows}
          */
         getAlumni(page_number: number?): Promise<StudentRows>
     }
 
     export class OpeningSpeech {
+        constructor(baseURL: string)
+
         /**
          * Gets the headmaster's opening speech
          * 
@@ -116,9 +128,17 @@ declare module "cms-sekolahku-api" {
         getOpeningSpeech(): Promise<string>
     }
 
-    export enum ParseInfo {
-        XHR,
-        JSON
+    export class Download {
+        constructor(baseURL: string)
+
+        /**
+         * Gets all available files that can be downloaded (public files)
+         * 
+         * @param {string} slug The file slug
+         * @param {number} page_number Page number
+         * @returns {DownloadFilesRows}
+         */
+        getFiles(slug: string, page_number: number?): Promise<DownloadFilesRows>
     }
     
     export interface PostRows {
@@ -219,6 +239,21 @@ declare module "cms-sekolahku-api" {
         birth_date: string,
         photo: string,
         employment_type: string
+    }
+
+    export interface DownloadFilesRows {
+        rows: [DownloadFilesInformation]
+    }
+    
+    export interface DownloadFilesInformation {
+        id: number,
+        file_title: string,
+        file_name: string,
+        file_ext: string
+        file_size: string,
+        category_name: string,
+        file_counter: string,
+        file_visibility: string
     }
 
     export interface ResponseStatus {
