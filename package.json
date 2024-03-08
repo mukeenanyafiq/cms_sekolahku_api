@@ -1,0 +1,21 @@
+{
+  "name": "cms-sekolahku-api",
+  "version": "1.0.0",
+  "description": "Access to public assets of your school's website using this API!",
+  "main": "index.js",
+  "type": "commonjs",
+  "types": "index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cms-sekolahku",
+    "api"
+  ],
+  "author": "mukeenanyafiq",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "xml-js": "^1.6.11"
+  }
+}
