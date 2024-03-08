@@ -13,7 +13,7 @@ declare module "cms-sekolahku-api" {
          * Get current page feed (Newest posts)
          * 
          * @param {parseInfo} parseInfo How the information will be parsed
-         * @returns { string | XMLJSON }
+         * @returns {string | XMLJSON}
          */
         getCurrentFeed(parseInfo: ParseInfo): Promise<string | XMLJSON>
 
@@ -22,16 +22,16 @@ declare module "cms-sekolahku-api" {
          * 
          * @param {string} category_slug The category name
          * @param {number} page_number Category page
-         * @returns { PostRows }
+         * @returns {PostRows}
          */
         getPostsByCategories(category_slug: string, page_number: number?): Promise<PostRows>
 
         /**
-         * Get all post with a specific tag (straight up searching)
+         * Get all post with a specific tag
          * 
          * @param {string} tag The specified tag
          * @param {number} page_number Category page
-         * @returns { PostRows }
+         * @returns {PostRows}
          */
         getPostsByTags(tag: string, page_number: number?): Promise<PostRows>
         
@@ -41,7 +41,7 @@ declare module "cms-sekolahku-api" {
          * @param {string} year The specified year
          * @param {string} month The specified month
          * @param {number} page_number Category page
-         * @returns { PostRows }
+         * @returns {PostRows}
          */
         getPostsByArchives(year: string, month: string, page_number: number?): Promise<PostRows>
     }
@@ -52,7 +52,7 @@ declare module "cms-sekolahku-api" {
          * 
          * @param {number} post_id The ID of the post
          * @param {number} page_number Page number
-         * @returns { CommentRows }
+         * @returns {CommentRows}
          */
         getPostComments(post_id: number, page_number: number?): Promise<CommentRows>
         
@@ -64,7 +64,7 @@ declare module "cms-sekolahku-api" {
          * @param {string} email The author's email
          * @param {string} url The author's URL
          * @param {string} content The content of the comment
-         * @returns { ResponseStatus }
+         * @returns {ResponseStatus}
          */
         postComment(post_id: number, author: string, email: string, url: string, content: string): Promise<ResponseStatus>
     }

@@ -21,10 +21,10 @@ class Posts {
     async getPostsByCategories(category_slug, page_number = 1) {
         try {
             return QuickRequest(`${this.baseURL}public/post_categories/get_posts`, "POST", { "page_number": page_number, "category_slug": category_slug }, {
-                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "content-type": "application/x-www-form-urlencoded",
                 "x-requested-with": "XMLHttpRequest",
             }).then((response) => {
-                return buildPostRows(response.data)
+                return buildPostRows(this.baseURL, response.data)
             })
         } catch(err) { throw err }
     }
@@ -32,10 +32,10 @@ class Posts {
     async getPostsByTags(tag, page_number = 1) {
         try {
             return QuickRequest(`${this.baseURL}public/post_tags/get_posts`, "POST", { "page_number": page_number, "tag": tag }, {
-                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "content-type": "application/x-www-form-urlencoded",
                 "x-requested-with": "XMLHttpRequest",
             }).then((response) => {
-                return buildPostRows(response.data)
+                return buildPostRows(this.baseURL, response.data)
             })
         } catch(err) { throw err }
     }
@@ -43,7 +43,7 @@ class Posts {
     async getPostsByArchives(year, month, page_number = 1) {
         try {
             return QuickRequest(`${this.baseURL}public/post_tags/get_posts`, "POST", { "page_number": page_number, "year": year, "month": month }, {
-                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "content-type": "application/x-www-form-urlencoded",
                 "x-requested-with": "XMLHttpRequest",
             }).then((response) => {
                 return buildPostRows(this.baseURL, response.data)
@@ -60,7 +60,7 @@ class Comments {
     async getPostComments(post_id, page_number = 1) {
         try {
             return QuickRequest(`${this.baseURL}public/post_comments/get_post_comments`, "POST", { "page_number": page_number, "comment_post_id": post_id }, {
-                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "content-type": "application/x-www-form-urlencoded",
                 "x-requested-with": "XMLHttpRequest",
             }).then((response) => {
                 return response.data
@@ -77,13 +77,9 @@ class Comments {
                 "comment_content": content,
                 "comment_post_id": post_id 
             }, {
-                "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+                "content-type": "application/x-www-form-urlencoded",
                 "x-requested-with": "XMLHttpRequest",
             }).then((response) => {
-                if (!response.data.status == "success") {
-                    throw new Error(`An error has occured while trying to post a comment (${response.data.status}): "${response.data.message}"`)
-                }
-                
                 return response.data
             })
         } catch(err) { throw err }
