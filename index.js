@@ -1,4 +1,5 @@
 const axios = require("axios");
+const cheerio = require("cheerio");
 const xmljs = require("xml-js");
 
 class Posts {
@@ -143,6 +144,20 @@ class Employee {
     }
 }
 
+class OpeningSpeech {
+    constructor(baseURL) {
+        this.baseURL = baseURL
+    }
+
+    async getOpeningSpeech() {
+        try {
+            return QuickRequest(`${this.baseURL}public/opening_speech`).then(response => {
+                return cheerio.load(response.data)('div[class="card-body pb-0 pt-0"]').text().trim()
+            })
+        } catch(err) { throw err }
+    }
+}
+
 function quickPostCMS(url, data) {
     return QuickRequest(url, "POST", data, {
         "content-type": "application/x-www-form-urlencoded",
@@ -184,5 +199,6 @@ module.exports = {
     Gallery,
     Student,
     Alumni,
-    Employee
+    Employee,
+    OpeningSpeech
 }
