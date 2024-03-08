@@ -39,3 +39,5 @@ This module isn't complete. There are still many information to acquire that hav
 With your help, it would be a lot faster to complete this project!
 
 You can contribute in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) Anything that would improve this module a bit
+
+If you find any issues regarding about this module, make a new [issue!](https://github.com/mukeenanyafiq/cms_sekolahku_api/issues/new)
