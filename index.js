@@ -1,5 +1,5 @@
 const axios = require("axios");
-const xmljs = require("xml-js")
+const xmljs = require("xml-js");
 
 class Posts {
     constructor(baseURL) {
