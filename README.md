@@ -35,5 +35,7 @@ npm install cms_sekolahku_api
 ```
 
 # Contribution
-This module isn't complete. There are still many information to acquire and send that haven't been implemented in this API.
+This module isn't complete. There are still many information to acquire that haven't been implemented in this API.
 With your help, it would be a lot faster to complete this project!
+
+You can contribute in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) Anything that would improve this module a bit
