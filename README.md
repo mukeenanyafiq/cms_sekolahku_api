@@ -4,7 +4,7 @@ If your school has a website that is powered using [CMS Sekolahku](https://sekol
 You can get current post feed (Newest posts)
 ```js
 const { Posts } = require('cms_sekolahku_api');
-const school = new Posts("https://smpn7tp.sch.id/")
+const school = new Posts("https://cms.sekolahku.web.id/")
 
 school.getCurrentFeed().then((response) => {
     console.log(response)
@@ -14,7 +14,7 @@ school.getCurrentFeed().then((response) => {
 or even, post a comment!
 ```js
 const { Comments } = require('cms_sekolahku_api');
-const school = new Comments("https://smpn7tp.sch.id/")
+const school = new Comments("https://cms.sekolahku.web.id/")
 
 school.postComment(69, "mukeenanyafiq", "mukeenan@gmail.com", "https://example.com", "Merdeka!").then((response) => {
     // Checks if the comment were successfully posted
@@ -26,7 +26,10 @@ Currently, this module includes:
 - getting post feed;
 - getting posts by category, tag, and archives;
 - getting comments on a post;
-- and post a comment
+- post a comment;
+- gets a gallery of photos and videos, also previewing them;
+- gets all student information;
+- and gets all alumni information
 
 # Install
 Install using npm:
@@ -35,7 +38,7 @@ npm install cms_sekolahku_api
 ```
 
 # Contribution
-This module isn't complete. There are still many information to acquire that haven't been implemented in this API.
+This module is not complete yet. There are still many information to acquire that haven't been implemented in this API.
 With your help, it would be a lot faster to complete this project!
 
 You can contribute in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) Anything that would improve this module a bit

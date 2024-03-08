@@ -13,18 +13,18 @@ declare module "cms-sekolahku-api" {
          * 
          * @param {string} category_slug The category name
          * @param {number} page_number Category page
-         * @returns {PostRows}
+         * @returns {Rows}
          */
-        getPostsByCategories(category_slug: string, page_number: number?): Promise<PostRows>
+        getPostsByCategories(category_slug: string, page_number: number?): Promise<Rows>
 
         /**
          * Get all post with a specific tag
          * 
          * @param {string} tag The specified tag
          * @param {number} page_number Category page
-         * @returns {PostRows}
+         * @returns {Rows}
          */
-        getPostsByTags(tag: string, page_number: number?): Promise<PostRows>
+        getPostsByTags(tag: string, page_number: number?): Promise<Rows>
         
         /**
          * Get all archived post with a specific year and month
@@ -32,9 +32,9 @@ declare module "cms-sekolahku-api" {
          * @param {string} year The specified year
          * @param {string} month The specified month
          * @param {number} page_number Category page
-         * @returns {PostRows}
+         * @returns {Rows}
          */
-        getPostsByArchives(year: string, month: string, page_number: number?): Promise<PostRows>
+        getPostsByArchives(year: string, month: string, page_number: number?): Promise<Rows>
     }
 
     export class Comments {
@@ -58,6 +58,53 @@ declare module "cms-sekolahku-api" {
          * @returns {ResponseStatus}
          */
         postComment(post_id: number, author: string, email: string, url: string, content: string): Promise<ResponseStatus>
+    }
+
+    export class Gallery {
+        /**
+         * Get photo albums on the website
+         * 
+         * @param {number} page_number Page number
+         * @returns {GalleryAlbumRows}
+         */
+        getPhotoAlbums(page_number: number?): Promise<GalleryAlbumRows>
+
+        /**
+         * Get the preview of an album
+         * 
+         * @param {number} id Album ID
+         * @returns {GalleryPreviewPhotoInformation}
+         */
+        getPhotoPreview(id: number): Promise<GalleryPreviewPhotoInformation>
+
+        /**
+         * Get videos on the website
+         * 
+         * @param {number} page_number Page number
+         * @returns {GalleryVideoRows}
+         */
+        getVideos(page_number: number?): Promise<GalleryVideoRows>
+    }
+
+    export class Student {
+        /**
+         * Gets all student information
+         * 
+         * @param academic_year_id The academic year ID
+         * @param class_group_id The class group ID
+         * @returns {StudentRows}
+         */
+        getStudents(academic_year_id: number?, class_group_id: number?): Promise<StudentRows>
+    }
+
+    export class Alumni {
+        /**
+         * Gets all alumni student information
+         * 
+         * @param page_number Page number
+         * @returns {StudentRows}
+         */
+        getAlumni(page_number: number?): Promise<StudentRows>
     }
 
     export enum ParseInfo {
@@ -91,7 +138,78 @@ declare module "cms-sekolahku-api" {
         comment_url: string,
         created_at: string,
         comment_content: string,
-        comment_reply: null
+        comment_reply: string
+    }
+
+    export interface GalleryAlbumRows {
+        rows: [GalleryAlbumInformation]
+    }
+
+    export interface GalleryAlbumInformation {
+        id: number,
+        album_title: string,
+        album_description: string,
+        album_cover: string,
+        album_slug: string,
+        photo_link: string
+    }
+
+    export interface GalleryPreviewPhotoInformation {
+        count: number,
+        items: [ { src: string } ]
+    }
+
+    export interface GalleryVideoRows {
+        rows: [GalleryVideoInformation]
+    }
+
+    export interface GalleryVideoInformation {
+        id: number,
+        post_title: string,
+        post_content: string,
+        url: string
+    }
+
+    export interface StudentRows {
+        rows: [StudentInformation]
+    }
+
+    export interface StudentInformation {
+        identity_number: string,
+        full_name: string,
+        gender: string,
+        birth_place: string,
+        birth_date: string,
+        photo: string
+    }
+
+    export interface AlumniRows {
+        rows: [AlumniInformation]
+    }
+
+    export interface AlumniInformation {
+        identity_number: string,
+        full_name: string,
+        gender: string,
+        birth_place: string,
+        birth_date: string,
+        start_date: string,
+        end_date: string,
+        photo: string
+    }
+
+    export interface EmployeeRows {
+        rows: [EmployeeInformation]
+    }
+
+    export interface EmployeeInformation {
+        nik: string,
+        full_name: string,
+        gender: string,
+        birth_place: string,
+        birth_date: string,
+        photo: string,
+        employment_type: string
     }
 
     export interface ResponseStatus {
