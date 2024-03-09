@@ -29,7 +29,17 @@ Currently, this module includes:
 - post a comment;
 - gets a gallery of photos and videos, also previewing them;
 - gets all student information;
-- and gets all alumni information
+- .. alumni;
+- .. employees;
+- .. opening speech;
+- .. and a list of available downloadable files
+
+# URL Path
+This module uses a specific URL path to obtain information from your school's website. Here's a list of them
+
+| Origin Function          | URL Paths | Methods | Data | Headers |
+| ---------------          | --------- | ------- | ---- | ------- |
+| `Posts.getCurrentFeed()` | `/feed`   | `GET`   |      |         |
 
 # Install
 Install using npm:
