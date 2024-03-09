@@ -3,20 +3,20 @@ If your school has a website that is powered using [CMS Sekolahku](https://sekol
 
 You can get current post feed (Newest posts)
 ```js
-const { Posts } = require('cms_sekolahku_api');
-const school = new Posts("https://cms.sekolahku.web.id/")
+const api = require('cms_sekolahku_api');
+const school = new api.CMSSekolahku("https://cms.sekolahku.web.id/")
 
-school.getCurrentFeed().then((response) => {
+school.posts.feed().then((response) => {
     console.log(response)
 })
 ```
 
 or even, post a comment!
 ```js
-const { Comments } = require('cms_sekolahku_api');
-const school = new Comments("https://cms.sekolahku.web.id/")
+const api = require('cms_sekolahku_api');
+const school = new api.CMSSekolahku("https://cms.sekolahku.web.id/")
 
-school.postComment(69, "mukeenanyafiq", "mukeenan@gmail.com", "https://example.com", "Merdeka!").then((response) => {
+school.comments.postComment(69, "mukeenanyafiq", "mukeenan@gmail.com", "https://example.com", "Merdeka!").then((response) => {
     // Checks if the comment were successfully posted
     console.log(response.status)
 })
@@ -50,7 +50,7 @@ This module uses a specific URL path to obtain information from your school's we
 
 | Origin Function                    | URL Path                                  | Methods | Data to send                                                 | Returns |
 | ---------------                    | --------                                  | ------- | ------------                                                 | ------- |
-| `Posts.getCurrentFeed()`           | `/feed`                                   | `GET`   |                                                              | `XHR`   |
+| `Posts.feed()`                     | `/feed`                                   | `GET`   |                                                              | `XHR`   |
 | `Posts.getPostsByCategories()`     | `/public/post_categories/get_posts`       | `POST`  | `{ "page_number": number, "category_slug": string }`         | `JSON`  |
 | `Posts.getPostsByTags()`           | `/public/post_tags/get_posts`             | `POST`  | `{ "page_number": number, "tag": string }`                   | `JSON`  |
 | `Posts.getPostsByArchives()`       | `/public/archives/get_posts`              | `POST`  | `{ "page_number": number, "year": string, "month": string }` | `JSON`  |
@@ -81,8 +81,11 @@ npm install cms_sekolahku_api
 
 # Contribute
 This module is not complete yet. There are still hopefully more information to acquire that haven't been implemented in this API.
-With your help, it would be a lot faster to complete this project!
+however, With your help, it would be a lot faster to complete this project!
 
-You can contribute in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) Anything that would improve this module a bit
+You can do: 
+- Try help changing something in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) 
+or
+- If you find any issues regarding about this module, make a new [issue!](https://github.com/mukeenanyafiq/cms_sekolahku_api/issues/new)
 
-If you find any issues regarding about this module, make a new [issue!](https://github.com/mukeenanyafiq/cms_sekolahku_api/issues/new)
+Anything that would improve this module a bit!

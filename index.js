@@ -2,12 +2,32 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const xmljs = require("xml-js");
 
+// Base class
+class CMSSekolahku {
+    // Construct a website's public information grabber
+    constructor(baseURL) {
+        this.baseURL = baseURL;
+
+        // Register all class that are not exported
+        this.posts = new Posts(this.baseURL);
+        this.comments = new Comments(this.baseURL);
+        this.gallery = new Gallery(this.baseURL);
+        this.student = new Student(this.baseURL);
+        this.alumni = new Alumni(this.baseURL);
+        this.employee = new Employee(this.baseURL);
+        this.openingSpeech = new OpeningSpeech(this.baseURL);
+        this.download = new Download(this.baseURL);
+        this.subscribe = new Subscribe(this.baseURL);
+        this.pollings = new Pollings(this.baseURL);
+    }
+}
+
 class Posts {
     constructor(baseURL) {
         this.baseURL = baseURL;
     }
 
-    async getCurrentFeed(parseInfo = "XHR") {
+    async feed(parseInfo = "XHR") {
         try {
             return QuickRequest(`${this.baseURL}feed`).then((response) => {
                 if (parseInfo == "JSON") {
@@ -21,7 +41,10 @@ class Posts {
 
     async getPostsByCategories(category_slug, page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/post_categories/get_posts`, { "page_number": page_number, "category_slug": category_slug }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/post_categories/get_posts`, { 
+                "page_number": page_number, 
+                "category_slug": category_slug 
+            }).then((response) => {
                 return buildPostRows(this.baseURL, response.data)
             })
         } catch(err) { throw err }
@@ -29,7 +52,10 @@ class Posts {
     
     async getPostsByTags(tag, page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/post_tags/get_posts`, { "page_number": page_number, "tag": tag }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/post_tags/get_posts`, { 
+                "page_number": page_number, 
+                "tag": tag 
+            }).then((response) => {
                 return buildPostRows(this.baseURL, response.data)
             })
         } catch(err) { throw err }
@@ -37,7 +63,11 @@ class Posts {
 
     async getPostsByArchives(year, month, page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/archives/get_posts`, { "page_number": page_number, "year": year, "month": month }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/archives/get_posts`, { 
+                "page_number": page_number, 
+                "year": year, 
+                "month": month 
+            }).then((response) => {
                 return buildPostRows(this.baseURL, response.data)
             })
         } catch(err) { throw err }
@@ -51,7 +81,10 @@ class Comments {
 
     async getPostComments(post_id, page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/post_comments/get_post_comments`, { "page_number": page_number, "comment_post_id": post_id }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/post_comments/get_post_comments`, { 
+                "page_number": page_number, 
+                "comment_post_id": post_id 
+            }).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -79,7 +112,9 @@ class Gallery {
 
     async getPhotoAlbums(page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/gallery_photos/get_albums`, { "page_number": page_number }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/gallery_photos/get_albums`, { 
+                "page_number": page_number 
+            }).then((response) => {
                 return buildAlbumRows(this.baseURL, response.data)
             })
         } catch(err) { throw err }
@@ -87,7 +122,9 @@ class Gallery {
 
     async getPhotoPreview(id) {
         try {
-            return quickPostCMS(`${this.baseURL}public/gallery_photos/preview`, { "id": id }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/gallery_photos/preview`, { 
+                "id": id 
+            }).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -95,7 +132,9 @@ class Gallery {
 
     async getVideos(page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/gallery_videos/get_videos`, { "page_number": page_number }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/gallery_videos/get_videos`, { 
+                "page_number": page_number
+            }).then((response) => {
                 return buildVideoRows(response.data)
             })
         } catch(err) { throw err }
@@ -109,7 +148,10 @@ class Student {
 
     async getStudents(academic_year_id = 1, class_group_id = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/student_directory/get_students`, { "academic_year_id": academic_year_id, "class_group_id": class_group_id }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/student_directory/get_students`, { 
+                "academic_year_id": academic_year_id, 
+                "class_group_id": class_group_id 
+            }).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -123,7 +165,9 @@ class Alumni {
 
     async getAlumni(page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/alumni_directory/get_alumni`, { "page_number": page_number }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/alumni_directory/get_alumni`, { 
+                "page_number": page_number 
+            }).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -137,7 +181,9 @@ class Employee {
 
     async getEmployees(page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/employee_directory/get_employees`, { "page_number": page_number }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/employee_directory/get_employees`, { 
+                "page_number": page_number 
+            }).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -165,7 +211,10 @@ class Download {
 
     async getFiles(slug, page_number = 1) {
         try {
-            return quickPostCMS(`${this.baseURL}public/download/get_files`, { "slug": slug, "page_number": page_number }).then((response) => {
+            return quickPostCMS(`${this.baseURL}public/download/get_files`, { 
+                "slug": slug, 
+                "page_number": page_number 
+            }).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -179,7 +228,10 @@ class Subscribe {
 
     async subscribe(subscriber_email, csrf_token, _sessions) {
         try {
-            return quickPostCMS(`${this.baseURL}subscribe`, { "subscriber": subscriber_email, "csrf_token": csrf_token }, `_sessions=${_sessions}`).then((response) => {
+            return quickPostCMS(`${this.baseURL}subscribe`, { 
+                "subscriber": subscriber_email, 
+                "csrf_token": csrf_token 
+            }, `_sessions=${_sessions}`).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -193,7 +245,10 @@ class Pollings {
 
     async vote(answer_id, csrf_token, _sessions) {
         try {
-            return quickPostCMS(`${this.baseURL}vote`, { "answer_id": answer_id, "csrf_token": csrf_token }, `_sessions=${_sessions}`).then((response) => {
+            return quickPostCMS(`${this.baseURL}vote`, { 
+                "answer_id": answer_id, 
+                "csrf_token": csrf_token 
+            }, `_sessions=${_sessions}`).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
@@ -237,14 +292,5 @@ function QuickRequest(url, method, body, headers) {
 }
 
 module.exports = { 
-    Posts,
-    Comments,
-    Gallery,
-    Student,
-    Alumni,
-    Employee,
-    OpeningSpeech,
-    Download,
-    Subscribe,
-    Pollings
+    CMSSekolahku
 }
