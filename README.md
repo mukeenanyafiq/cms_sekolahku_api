@@ -35,11 +35,34 @@ Currently, this module includes:
 - .. and a list of available downloadable files
 
 # URL Path
-This module uses a specific URL path to obtain information from your school's website. Here's a list of them
+This module uses a specific URL path to obtain information from your school's website and then parsing it into something readable. You can use these URL paths (by continuing from the base url) instead if you want a cheapest way
 
-| Origin Function          | URL Paths | Methods | Data | Headers |
-| ---------------          | --------- | ------- | ---- | ------- |
-| `Posts.getCurrentFeed()` | `/feed`   | `GET`   |      |         |
+**Data that will not included in the original path**
+- `post_url` element (from `PostRows`)
+- `photo_url` element (from `GalleryAlbumInformation`)
+- `url` element (from `GalleryVideoInformation`)
+
+**Default Headers for POST Requests**
+- `"Content-Type": "application/x-www-form-urlencoded"`
+- `"x-requested-with": "XMLHttpRequest"`
+
+| Origin Function                    | URL Paths                                 | Methods | Data to send                                                 | Returns |
+| ---------------                    | ---------                                 | ------- | ------------                                                 | ------- |
+| `Posts.getCurrentFeed()`           | `/feed`                                   | `GET`   |                                                              | `XHR`   |
+| `Posts.getPostsByCategories()`     | `/public/post_categories/get_posts`       | `POST`  | `{ "page_number": number, "category_slug": string }`         | `JSON`  |
+| `Posts.getPostsByTags()`           | `/public/post_tags/get_posts`             | `POST`  | `{ "page_number": number, "tag": string }`                   | `JSON`  |
+| `Posts.getPostsByArchives()`       | `/public/archives/get_posts`              | `POST`  | `{ "page_number": number, "year": string, "month": string }` | `JSON`  |
+| `Comments.getPostComments()`       | `/public/post_comments/get_post_comments` | `POST`  | `{ "page_number": number, "comment_post_id": number }`       | `JSON`  |
+| `Comments.postComment()`           | `/public/post_comments`                   | `POST`  | `{ "comment_author": author, "comment_email": email, "comment_url": url, "comment_content": content, "comment_post_id": post_id }` | `JSON`  |
+| `Gallery.getPhotoAlbums()`         | `/public/gallery_photos/get_albums`       | `POST`  | `{ "page_number": number }`                                  | `JSON`  |
+| `Gallery.getPhotoPreview()`        | `/public/gallery_photos/preview`          | `POST`  | `{ "id": number }`                                           | `JSON`  |
+| `Gallery.getVideos()`              | `/public/gallery_photos/get_videos`       | `POST`  | `{ "page_number": number }`                                  | `JSON`  |
+| `Student.getStudents()`            | `/public/student_directory/get_students`  | `POST`  | `{ "academic_year_id": number, "class_group_id": number }`   | `JSON`  |
+| `Alumni.getAlumni()`               | `/public/alumni_directory/get_alumni`     | `POST`  | `{ "page_number": number }`                                  | `JSON`  |
+| `Employee.getEmployees()`          | `/public/employee_directory/get_employee` | `POST`  | `{ "page_number": number }`                                  | `JSON`  |
+| `OpeningSpeech.getOpeningSpeech()` | `/public/opening_speech`                  | `GET`   |                                                              | `HTML`  |
+| `Download.getFiles()`              | `/public/download/get_files`              | `POST`  | `{ "slug": string, "page_number": number }`                  | `JSON`  |
+| `Subscribe.subscribe()`            | `/public/subscribe`                       | `POST`  | `{ "csrf_token": string, "subscriber": string }`             | `JSON`  |
 
 # Install
 Install using npm:
@@ -47,7 +70,7 @@ Install using npm:
 npm install cms_sekolahku_api
 ```
 
-# Contribution
+# Contribute
 This module is not complete yet. There are still many information to acquire that haven't been implemented in this API.
 With your help, it would be a lot faster to complete this project!
 

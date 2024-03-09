@@ -148,10 +148,10 @@ declare module "cms-sekolahku-api" {
          * Subscribe to the website's latest post (if the website supports email-sending)
          * 
          * @param {string} csrf_token The CSRF Token (don't know what that means)
-         * @param {string} subscriber Subscriber email
+         * @param {string} subscriber_email Subscriber's email
          * @returns {DownloadFilesRows}
          */
-        subscribe(csrf_token: string, subscriber: string): Promise<DownloadFilesRows>
+        subscribe(csrf_token: string, subscriber_email: string): Promise<DownloadFilesRows>
     }
     
     export interface PostRows {
@@ -193,7 +193,7 @@ declare module "cms-sekolahku-api" {
         album_description: string,
         album_cover: string,
         album_slug: string,
-        photo_link: string
+        photo_url: string
     }
 
     export interface GalleryPreviewPhotoInformation {
