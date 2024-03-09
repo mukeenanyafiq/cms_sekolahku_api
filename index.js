@@ -177,19 +177,34 @@ class Subscribe {
         this.baseURL = baseURL
     }
 
-    async subscribe(csrf_token, subscriber_email) {
+    async subscribe(subscriber_email, csrf_token, _sessions) {
         try {
-            return quickPostCMS(`${this.baseURL}public/subscribe`, { "csrf_token": csrf_token, "subscriber": subscriber_email }).then((response) => {
+            return quickPostCMS(`${this.baseURL}subscribe`, { "subscriber": subscriber_email, "csrf_token": csrf_token }, `_sessions=${_sessions}`).then((response) => {
                 return response.data
             })
         } catch(err) { throw err }
     }
 }
 
-function quickPostCMS(url, data) {
+class Pollings {
+    constructor(baseURL) {
+        this.baseURL = baseURL
+    }
+
+    async vote(answer_id, csrf_token, _sessions) {
+        try {
+            return quickPostCMS(`${this.baseURL}vote`, { "answer_id": answer_id, "csrf_token": csrf_token }, `_sessions=${_sessions}`).then((response) => {
+                return response.data
+            })
+        } catch(err) { throw err }
+    }
+}
+
+function quickPostCMS(url, data, cookie) {
     return QuickRequest(url, "POST", data, {
         "content-type": "application/x-www-form-urlencoded",
-        "x-requested-with": "XMLHttpRequest"
+        "x-requested-with": "XMLHttpRequest",
+        "cookie": cookie
     })
 }
 
@@ -230,5 +245,6 @@ module.exports = {
     Employee,
     OpeningSpeech,
     Download,
-    Subscribe
+    Subscribe,
+    Pollings
 }

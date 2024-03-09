@@ -37,7 +37,9 @@ Currently, this module includes:
 # URL Path
 This module uses a specific URL path to obtain information from your school's website and then parsing it into something readable. You can use these URL paths (by continuing from the base url) instead if you want a cheapest way
 
-**Data that will not included in the original path**
+- `[H]` means the data needs another header for the data that were sent to return "success" status
+
+**Data that will not included in the original URL path**
 - `post_url` element (from `PostRows`)
 - `photo_url` element (from `GalleryAlbumInformation`)
 - `url` element (from `GalleryVideoInformation`)
@@ -46,8 +48,8 @@ This module uses a specific URL path to obtain information from your school's we
 - `"Content-Type": "application/x-www-form-urlencoded"`
 - `"x-requested-with": "XMLHttpRequest"`
 
-| Origin Function                    | URL Paths                                 | Methods | Data to send                                                 | Returns |
-| ---------------                    | ---------                                 | ------- | ------------                                                 | ------- |
+| Origin Function                    | URL Path                                  | Methods | Data to send                                                 | Returns |
+| ---------------                    | --------                                  | ------- | ------------                                                 | ------- |
 | `Posts.getCurrentFeed()`           | `/feed`                                   | `GET`   |                                                              | `XHR`   |
 | `Posts.getPostsByCategories()`     | `/public/post_categories/get_posts`       | `POST`  | `{ "page_number": number, "category_slug": string }`         | `JSON`  |
 | `Posts.getPostsByTags()`           | `/public/post_tags/get_posts`             | `POST`  | `{ "page_number": number, "tag": string }`                   | `JSON`  |
@@ -62,7 +64,14 @@ This module uses a specific URL path to obtain information from your school's we
 | `Employee.getEmployees()`          | `/public/employee_directory/get_employee` | `POST`  | `{ "page_number": number }`                                  | `JSON`  |
 | `OpeningSpeech.getOpeningSpeech()` | `/public/opening_speech`                  | `GET`   |                                                              | `HTML`  |
 | `Download.getFiles()`              | `/public/download/get_files`              | `POST`  | `{ "slug": string, "page_number": number }`                  | `JSON`  |
-| `Subscribe.subscribe()`            | `/public/subscribe`                       | `POST`  | `{ "csrf_token": string, "subscriber": string }`             | `JSON`  |
+| `Subscribe.subscribe()`            | `/subscribe`                              | `POST`  | `[H] { "subscriber": string, "csrf_token": string }`         | `JSON`  |
+| `Pollings.vote()`                  | `/vote`                                   | `POST`  | `[H] { "answer_id": number, "csrf_token": string }`          | `JSON`  |
+
+**Data to send headers for [H]**
+| Data to send                                     | URL Path     | Headers required                |
+| ------------                                     | --------     | ----------------                |
+| `{ "subscriber": string, "csrf_token": string }` | `/subscribe` | `Cookie: _sessions=string`      |
+| `{ "answer_id": number, "csrf_token": string }`  | `/vote`      | `Cookie: _sessions=string`      |
 
 # Install
 Install using npm:
@@ -71,7 +80,7 @@ npm install cms_sekolahku_api
 ```
 
 # Contribute
-This module is not complete yet. There are still many information to acquire that haven't been implemented in this API.
+This module is not complete yet. There are still hopefully more information to acquire that haven't been implemented in this API.
 With your help, it would be a lot faster to complete this project!
 
 You can contribute in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) Anything that would improve this module a bit

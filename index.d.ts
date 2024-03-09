@@ -145,13 +145,32 @@ declare module "cms-sekolahku-api" {
         constructor(baseURL: string)
 
         /**
-         * Subscribe to the website's latest post (if the website supports email-sending)
+         * **NOTE: The function will only work ONE TIME and then won't work anymore unless you change the "csrf_token" & "_sessions" parameter**
          * 
-         * @param {string} csrf_token The CSRF Token (don't know what that means)
+         * Subscribe to the website's latest post
+         * 
          * @param {string} subscriber_email Subscriber's email
-         * @returns {DownloadFilesRows}
+         * @param {string} csrf_token The CSRF Token (find it on the head of the html)
+         * @param {string} _sessions The cookie for "_sessions" (find it on DevTools > Application > Cookies > the base url)
+         * @returns {ResponseCSRFTokenStatus} This function will affect your web interface on the Base URL if attempted to do a similar function.
          */
-        subscribe(csrf_token: string, subscriber_email: string): Promise<DownloadFilesRows>
+        subscribe(subscriber_email: string, csrf_token: string?, _sessions: string): Promise<ResponseCSRFTokenStatus>
+    }
+
+    export class Pollings {
+        constructor(baseURL: string)
+
+        /**
+         * **NOTE: The function will only work ONE TIME and then won't work anymore unless you change the "csrf_token" & "_sessions" parameter**
+         * 
+         * Vote in the latest poll questions
+         * 
+         * @param {number} answer_id The ID of the vote's answer
+         * @param {string} csrf_token The CSRF Token (find it on the head of the html)
+         * @param {string} _sessions The cookie for "_sessions" (find it on DevTools > Application > Cookies > the base url)
+         * @returns {ResponseCSRFTokenStatus} This function will affect your web interface on the Base URL if attempted to do a similar function.
+         */
+        vote(answer_id: number, csrf_token: string?, _sessions: string): Promise<ResponseCSRFTokenStatus>
     }
     
     export interface PostRows {
@@ -267,6 +286,12 @@ declare module "cms-sekolahku-api" {
         category_name: string,
         file_counter: string,
         file_visibility: string
+    }
+
+    export interface ResponseCSRFTokenStatus {
+        csrf_token: string,
+        message: string,
+        status: string
     }
 
     export interface ResponseStatus {
