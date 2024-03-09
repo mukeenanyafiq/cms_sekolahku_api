@@ -44,7 +44,7 @@ This module uses a specific URL path to obtain information from your school's we
 - `photo_url` element (from `GalleryAlbumInformation`)
 - `url` element (from `GalleryVideoInformation`)
 
-**Default Headers for POST Requests**
+**Required Headers for POST Requests**
 - `"Content-Type": "application/x-www-form-urlencoded"`
 - `"x-requested-with": "XMLHttpRequest"`
 
