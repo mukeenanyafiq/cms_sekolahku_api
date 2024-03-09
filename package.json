@@ -1,7 +1,7 @@
 {
   "name": "cms_sekolahku_api",
   "version": "1.0.3",
-  "description": "Access to public assets of your school's website using this API!",
+  "description": "Access to public online assets of your school's website using this API!",
   "main": "index.js",
   "type": "commonjs",
   "types": "index.d.ts",
