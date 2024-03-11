@@ -42,7 +42,7 @@ This module uses a specific URL path to obtain information from your school's we
 - `[H]` means the data needs another header for the data that were sent to return "success" status
 
 **Data that will not included in the original URL path**
-- `post_url` element (from `PostRows`)
+- `post_url` & `post_comment_count` element (from `PostRows`)
 - `photo_url` element (from `GalleryAlbumInformation`)
 - `url` element (from `GalleryVideoInformation`)
 
@@ -84,12 +84,12 @@ npm i cms_sekolahku_api
 # Contribute
 This module is not complete yet. There are still hopefully more information to acquire that haven't been implemented in this API.
 
-Most of the information were completely private and couldn't be acquired, and making it public from the school's organization will help this module grows bigger. Alternative way: making an algorithm.
+Most of the information were completely private and couldn't be acquired, and making it public from the school's organization will help this module grows bigger. Alternative way: making an algorithm. (could be risky when the website is modified to not look the same as the [CMS Sekolahku](https://sekolahku.web.id))
 
 However, with your help, it would be a lot faster to complete this project!
 
 You can do: 
-- Try help changing something in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) 
+- Try help adding/changing something (example: my bad code) in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) 
 or
 - If you find any issues/suggestions regarding about this module, make a new [issue!](https://github.com/mukeenanyafiq/cms_sekolahku_api/issues/new)
 
@@ -97,3 +97,4 @@ Anything that would improve this module a bit!
 
 # Is it recommended?
 Probably not for most developers.
+I just made this in the first place because I was bored.

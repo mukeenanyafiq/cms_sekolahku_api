@@ -34,6 +34,17 @@ declare module "cms_sekolahku_api" {
         feed(parseInfo: "XHR" | "JSON" | null): Promise<string>
     
         /**
+         * **NOTE: This function uses algorithm, and it uses 2 or more URL Paths because it's impossible to just fetch it directly**
+         * 
+         * Get the most commented posts on the category
+         * 
+         * @param {string} category_slug The category name
+         * @param {boolean} record Record what's actually happening in the background while you are waiting for the result
+         * @returns {PostRows}
+         */
+        getMostCommentedPostOnCategory(category_slug: string, record: boolean?): Promise<PostRows>
+
+        /**
          * Get all post on a specific category
          * 
          * @param {string} category_slug The category name
@@ -174,6 +185,8 @@ declare module "cms_sekolahku_api" {
         constructor(baseURL: string)
     
         /**
+         * **NOTE: This one could be tricky if the website's interface is modified**
+         * 
          * Gets the headmaster's opening speech
          * 
          * @returns {string}
@@ -248,6 +261,7 @@ declare module "cms_sekolahku_api" {
         post_slug: string,
         post_counter: number,
         post_author: string,
+        post_comment_count: number,
         post_url: string
     }
     
