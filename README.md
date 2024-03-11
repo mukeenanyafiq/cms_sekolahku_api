@@ -84,7 +84,7 @@ npm i cms_sekolahku_api
 # Contribute
 This module is not complete yet. There are still hopefully more information to acquire that haven't been implemented in this API.
 
-Most of the information that could be acquired were completely private and couldn't be acquired, and making it public from the school's organization will help this module grows bigger. Alternative way: making an algorithm.
+Most of the information were completely private and couldn't be acquired, and making it public from the school's organization will help this module grows bigger. Alternative way: making an algorithm.
 
 However, with your help, it would be a lot faster to complete this project!
 
