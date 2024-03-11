@@ -35,7 +35,7 @@ Currently, this module includes:
 - .. and a list of available downloadable files
 
 # URL Path
-This module uses a specific URL path to obtain information from your school's website and then parsing it into something readable. You can use these URL paths (by continuing from the base url) instead if you want a cheapest way
+This module uses a specific URL path to obtain information from your school's website and then parsing it into something readable. You can use these URL paths (by continuing from the base url) instead if you want the cheapest way
 
 - `[H]` means the data needs another header for the data that were sent to return "success" status
 
@@ -81,7 +81,7 @@ npm install cms_sekolahku_api
 
 # Contribute
 This module is not complete yet. There are still hopefully more information to acquire that haven't been implemented in this API.
-however, With your help, it would be a lot faster to complete this project!
+However, with your help, it would be a lot faster to complete this project!
 
 You can do: 
 - Try help changing something in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) 
