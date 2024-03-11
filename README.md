@@ -4,7 +4,7 @@ If your school has a website that is powered using [CMS Sekolahku](https://sekol
 You can get current post feed (Newest posts)
 ```js
 const api = require('cms_sekolahku_api');
-const school = new api.CMSSekolahku("https://cms.sekolahku.web.id/")
+const school = new api.BaseAPI("https://cms.sekolahku.web.id/")
 
 school.posts.feed().then((response) => {
     console.log(response)
@@ -14,7 +14,7 @@ school.posts.feed().then((response) => {
 or even, post a comment!
 ```js
 const api = require('cms_sekolahku_api');
-const school = new api.CMSSekolahku("https://cms.sekolahku.web.id/")
+const school = new api.BaseAPI("https://cms.sekolahku.web.id/")
 
 school.comments.postComment(69, "mukeenanyafiq", "mukeenan@gmail.com", "https://example.com", "Merdeka!").then((response) => {
     // Checks if the comment were successfully posted
@@ -32,6 +32,8 @@ Currently, this module includes:
 - .. alumni;
 - .. employees;
 - .. opening speech;
+- .. subscribing for the latest posts;
+- .. voting in the latest polls;
 - .. and a list of available downloadable files
 
 # URL Path
@@ -76,16 +78,22 @@ This module uses a specific URL path to obtain information from your school's we
 # Install
 Install using npm:
 ```
-npm install cms_sekolahku_api
+npm i cms_sekolahku_api
 ```
 
 # Contribute
 This module is not complete yet. There are still hopefully more information to acquire that haven't been implemented in this API.
+
+Most of the information that could be acquired were completely private and couldn't be acquired, and making it public from the school's organization will help this module grows bigger. Alternative way: making an algorithm.
+
 However, with your help, it would be a lot faster to complete this project!
 
 You can do: 
 - Try help changing something in this project by making a new [pull request!](https://github.com/mukeenanyafiq/cms_sekolahku_api/pulls) 
 or
-- If you find any issues regarding about this module, make a new [issue!](https://github.com/mukeenanyafiq/cms_sekolahku_api/issues/new)
+- If you find any issues/suggestions regarding about this module, make a new [issue!](https://github.com/mukeenanyafiq/cms_sekolahku_api/issues/new)
 
 Anything that would improve this module a bit!
+
+# Is it recommended?
+Probably not for most developers.

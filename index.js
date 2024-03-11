@@ -3,7 +3,7 @@ const cheerio = require("cheerio");
 const xmljs = require("xml-js");
 
 // Base class
-class CMSSekolahku {
+class BaseAPI {
     // Construct a website's public information grabber
     constructor(baseURL) {
         this.baseURL = baseURL;
@@ -291,6 +291,16 @@ function QuickRequest(url, method, body, headers) {
     return axios.default.request({ url: url, method: method, data: body, headers: headers })
 }
 
-module.exports = { 
-    CMSSekolahku
+module.exports = {
+    BaseAPI,
+    Posts,
+    Comments,
+    Gallery,
+    Student,
+    Alumni,
+    Employee,
+    OpeningSpeech,
+    Download,
+    Subscribe,
+    Pollings
 }
