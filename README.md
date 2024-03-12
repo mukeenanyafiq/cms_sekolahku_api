@@ -70,10 +70,10 @@ This module uses a specific URL path to obtain information from your school's we
 | `Pollings.vote()`                  | `/vote`                                   | `POST`  | `[H] { "answer_id": number, "csrf_token": string }`          | `JSON`  |
 
 **Data to send headers for [H]**
-| Data to send                                     | URL Path     | Headers required                |
-| ------------                                     | --------     | ----------------                |
-| `{ "subscriber": string, "csrf_token": string }` | `/subscribe` | `Cookie: _sessions=string`      |
-| `{ "answer_id": number, "csrf_token": string }`  | `/vote`      | `Cookie: _sessions=string`      |
+| Data to send                                     | URL Path     | Headers required           |
+| ------------                                     | --------     | ----------------           |
+| `{ "subscriber": string, "csrf_token": string }` | `/subscribe` | `Cookie: _sessions=string` |
+| `{ "answer_id": number, "csrf_token": string }`  | `/vote`      | `Cookie: _sessions=string` |
 
 # Install
 Install using npm:

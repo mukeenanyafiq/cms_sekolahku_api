@@ -28,27 +28,49 @@ declare module "cms_sekolahku_api" {
         /**
          * Get current page feed (Newest posts)
          * 
-         * @param {"XHR" | "JSON" | null} parseInfo How the information will be parsed
+         * @param {"XHR" | "JSON" | null} parseInfo How the information will be parsed ("XHR")
          * @returns {string}
          */
         feed(parseInfo: "XHR" | "JSON" | null): Promise<string>
     
         /**
-         * **NOTE: This function uses algorithm, and it uses 2 or more URL Paths because it's impossible to just fetch it directly**
+         * **NOTE:**
+         * - This function uses algorithm, and it uses 2 or more URL Paths because it's impossible to just fetch it directly
+         * - Why? bang anton sofyan.
+         * - Because this function uses algorithm, the more post were in the category, the longer it takes to return the data
+         * - The more comments were also in each posts, the longer it takes to return the total comments for the post
          * 
          * Get the most commented posts on the category
          * 
          * @param {string} category_slug The category name
-         * @param {boolean} record Record what's actually happening in the background while you are waiting for the result
+         * @param {number} page_number Page number (1)
+         * @param {boolean} ascending Sort the list ascendingly (true)
+         * @param {boolean} record Record what's actually happening in the background (false)
          * @returns {PostRows}
          */
-        getMostCommentedPostOnCategory(category_slug: string, record: boolean?): Promise<PostRows>
+        getMostCommentedPostOnCategory(category_slug: string, page_number: number?, ascending: boolean?, record: boolean?): Promise<PostRows>
+
+        /**
+         * **NOTE:**
+         * - This function uses algorithm because it's impossible to just fetch it directly
+         * - Why? bang anton sofyan.
+         * - Because this function uses algorithm, the more post were in the category, the longer it takes to return the data
+         * 
+         * Get the most popular/viewed posts on the category
+         * 
+         * @param {string} category_slug The category name
+         * @param {number} page_number Page number (1)
+         * @param {boolean} ascending Sort the list ascendingly (true)
+         * @param {boolean} includeTotalComments Setting this to true may take a lot longer to return the data (false)
+         * @param {boolean} record Record what's actually happening in the background (false)
+         */
+        getPopularPostsOnCategory(category_slug: string, page_number: number?, ascending: boolean?, includeTotalComments: boolean?, record: boolean?): Promise<PostRows>
 
         /**
          * Get all post on a specific category
          * 
          * @param {string} category_slug The category name
-         * @param {number} page_number Category page
+         * @param {number} page_number Page number (1)
          * @returns {PostRows}
          */
         getPostsByCategories(category_slug: string, page_number: number?): Promise<PostRows>
@@ -57,7 +79,7 @@ declare module "cms_sekolahku_api" {
          * Get all post with a specific tag
          * 
          * @param {string} tag The specified tag
-         * @param {number} page_number Category page
+         * @param {number} page_number Page number (1)
          * @returns {PostRows}
          */
         getPostsByTags(tag: string, page_number: number?): Promise<PostRows>
@@ -67,7 +89,7 @@ declare module "cms_sekolahku_api" {
          * 
          * @param {string} year The specified year
          * @param {string} month The specified month
-         * @param {number} page_number Category page
+         * @param {number} page_number Page number (1)
          * @returns {PostRows}
          */
         getPostsByArchives(year: string, month: string, page_number: number?): Promise<PostRows>
@@ -83,7 +105,7 @@ declare module "cms_sekolahku_api" {
          * Get all comments on a post in a specific page number
          * 
          * @param {number} post_id The ID of the post
-         * @param {number} page_number Page number
+         * @param {number} page_number Page number (1)
          * @returns {CommentRows}
          */
         getPostComments(post_id: number, page_number: number?): Promise<CommentRows>
@@ -110,7 +132,7 @@ declare module "cms_sekolahku_api" {
         /**
          * Get photo albums on the website
          * 
-         * @param {number} page_number Page number
+         * @param {number} page_number Page number (1)
          * @returns {GalleryAlbumRows}
          */
         getPhotoAlbums(page_number: number?): Promise<GalleryAlbumRows>
@@ -126,7 +148,7 @@ declare module "cms_sekolahku_api" {
         /**
          * Get videos on the website
          * 
-         * @param {number} page_number Page number
+         * @param {number} page_number Page number (1)
          * @returns {GalleryVideoRows}
          */
         getVideos(page_number: number?): Promise<GalleryVideoRows>
@@ -141,8 +163,8 @@ declare module "cms_sekolahku_api" {
         /**
          * Gets all student information
          * 
-         * @param {number} academic_year_id The academic year ID
-         * @param {number} class_group_id The class group ID
+         * @param {number} academic_year_id The academic year ID (1)
+         * @param {number} class_group_id The class group ID (1)
          * @returns {StudentRows}
          */
         getStudents(academic_year_id: number?, class_group_id: number?): Promise<StudentRows>
@@ -157,7 +179,7 @@ declare module "cms_sekolahku_api" {
         /**
          * Gets all alumni student information
          * 
-         * @param {number} page_number Page number
+         * @param {number} page_number Page number (1)
          * @returns {StudentRows}
          */
         getAlumni(page_number: number?): Promise<StudentRows>
@@ -172,7 +194,7 @@ declare module "cms_sekolahku_api" {
         /**
          * Gets all employees information
          * 
-         * @param {number} page_number Page number
+         * @param {number} page_number Page number (1)
          * @returns {EmployeeRows}
          */
         getEmployess(page_number: number?): Promise<EmployeeRows>
@@ -204,7 +226,7 @@ declare module "cms_sekolahku_api" {
          * Gets all available files that can be downloaded (public files)
          * 
          * @param {string} slug The file slug
-         * @param {number} page_number Page number
+         * @param {number} page_number Page number (1)
          * @returns {DownloadFilesRows}
          */
         getFiles(slug: string, page_number: number?): Promise<DownloadFilesRows>
@@ -226,7 +248,7 @@ declare module "cms_sekolahku_api" {
          * @param {string} _sessions The cookie for "_sessions" (find it on DevTools > Application > Cookies > the base url)
          * @returns {ResponseCSRFTokenStatus} This function will affect your web interface on the Base URL if attempted to do a similar function.
          */
-        subscribe(subscriber_email: string, csrf_token: string?, _sessions: string): Promise<ResponseCSRFTokenStatus>
+        subscribe(subscriber_email: string, csrf_token: string, _sessions: string): Promise<ResponseCSRFTokenStatus>
     }
     
     export class Pollings {
@@ -261,7 +283,7 @@ declare module "cms_sekolahku_api" {
         post_slug: string,
         post_counter: number,
         post_author: string,
-        post_comment_count: number,
+        post_comment_count: number | undefined,
         post_url: string
     }
     

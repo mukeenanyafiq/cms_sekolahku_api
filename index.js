@@ -45,13 +45,13 @@ class Posts {
     // - then when it gets the post id for the most commented one, it will summarize it up
 
     // i feel like im a genius
-    async getMostCommentedPostOnCategory(category_slug, record = false) {
+    async getMostCommentedPostOnCategory(category_slug, page_number = 1, ascending = true, record = false) {
         try {
             const limitResult = 10
 
             let arrayIndex = 0
             let pageNumberResult = 1
-            let acquiredPostsInfo = { "rows": [] }
+            let acquiredPosts = { "rows": [] }
             let commentsCount = {}
             
             async function getPosts(baseURL) {
@@ -61,25 +61,23 @@ class Posts {
                 })
 
                 if (response.status == 200) {
-                    for (const postInfo of response.data.rows) {
-                        acquiredPostsInfo.rows.push(postInfo)
-                    }
+                    for (const postInfo of response.data.rows) acquiredPosts.rows.push(postInfo)
 
                     if (response.data.rows.length == limitResult) {
                         pageNumberResult += 1
                         return getPosts(baseURL)
                     } else if (response.data.rows.length < limitResult) {
-                        if (record) console.log(`Took ${pageNumberResult} page(s) to complete the list of posts (in total, ${acquiredPostsInfo.rows.length} posts were successfully grabbed)`)
+                        if (response.data.rows.length = 0) pageNumberResult -= 1
+
+                        if (record) console.log(`[${category_slug}] Took ${pageNumberResult} page(s) to complete the list of posts (in total, ${acquiredPosts.rows.length} post(s) recorded)`)
                         pageNumberResult = 1
                         return getComments(baseURL)
                     }
-                } else {
-                    throw new Error(`Something was off. The response status returns with ${response.status}`)
-                }
+                } else throw new Error(`Something went wrong while trying to get every post in the category. The server responded with status: ${response.status}`)
             }
 
             async function getComments(baseURL) {
-                let postId = acquiredPostsInfo.rows[arrayIndex].id
+                let postId = acquiredPosts.rows[arrayIndex].id
 
                 const response = await quickPostCMS(`${baseURL}public/post_comments/get_post_comments`, { 
                     "page_number": pageNumberResult,
@@ -87,41 +85,88 @@ class Posts {
                 })
 
                 if (response.status == 200) {
-                    if (commentsCount[postId]) {
-                        commentsCount[postId] += response.data.comments.length
-                    } else {
-                        commentsCount[postId] = response.data.comments.length
-                    }
+                    if (commentsCount[postId]) commentsCount[postId] += response.data.comments.length
+                    else commentsCount[postId] = response.data.comments.length
 
                     if (response.data.comments.length == limitResult) {
                         pageNumberResult += 1
                         return getComments(baseURL)
                     } else if (response.data.comments.length < limitResult) {
-                        if (record) console.log(`Took ${pageNumberResult} page(s) to complete the list of comments for Post ID ${postId} (in total, there were ${commentsCount[postId]} comment(s) recorded).`)
+                        if (response.data.comments.length = 0) pageNumberResult -= 1
+
+                        if (record) console.log(`[#${postId}] Took ${pageNumberResult} page(s) to complete the list of comments (in total, there were ${commentsCount[postId]} comment(s) recorded).`)
                         pageNumberResult = 1
                         
-                        if (arrayIndex < acquiredPostsInfo.rows.length - 1) {
+                        if (arrayIndex < acquiredPosts.rows.length - 1) {
                             arrayIndex += 1
                             return getComments(baseURL)
                         } else {
+                            if (record) console.log(`[${category_slug}] Total comments on all posts in the category successfully recorded. Summarizing data`)
+
                             let sortedArray = [];
+                            for (let i in commentsCount) sortedArray.push({ "id": i, "count": commentsCount[i]});
                         
-                            for (let i in commentsCount) {
-                                sortedArray.push({ "id": i, "count": commentsCount[i]});
-                            }
-                        
+                            // Sort data by their total comments
                             sortedArray = sortedArray.sort((a, b) => b.count - a.count);
 
-                            for (const post of acquiredPostsInfo.rows) {
-                                post.post_comment_count = sortedArray.find((value) => value.id == post.id).count.toString()
-                            }
+                            // Add the total comment count on each post information
+                            for (const post of acquiredPosts.rows) post.post_comment_count = sortedArray.find((value) => value.id == post.id).count.toString()
+                            if (ascending) acquiredPosts.rows = acquiredPosts.rows.sort((a, b) => Number.parseInt(b.post_comment_count) - Number.parseInt(a.post_comment_count))
+                            else acquiredPosts.rows = acquiredPosts.rows.sort((a, b) => Number.parseInt(a.post_comment_count) - Number.parseInt(b.post_comment_count))
 
-                            acquiredPostsInfo.rows = acquiredPostsInfo.rows.sort((a, b) => Number.parseInt(b.post_comment_count) - Number.parseInt(a.post_comment_count)).slice(0, limitResult)
-                            return buildPostRows(baseURL, acquiredPostsInfo, false)
+                            // Slice posts by their page number specified on the parameter
+                            if (page_number > 1) acquiredPosts.rows = acquiredPosts.rows.slice(limitResult * page_number, limitResult * page_number + limitResult)
+                            else acquiredPosts.rows = acquiredPosts.rows.slice(0, limitResult)
+
+                            // Return the data and build post rows
+                            return buildPostRows(baseURL, acquiredPosts, false)
                         }
                     }
-                } else {
-                    throw new Error(`Something was off. The response status returns with ${response.status}`)
+                } else throw new Error(`Something went wrong while trying to get the total comments were in the post. The server responded with status: ${response.status}`)
+            }
+
+            return getPosts(this.baseURL)
+        } catch(err) { throw err }
+    }
+
+    // This function runs an algorithm by doing:
+    // - getting all posts on the category..
+    // - then when it gets all the posts, it sorts the list by the post's viewed counter
+
+    // BANG ANTON SOFYAN.
+    async getPopularPostsOnCategory(category_slug, page_number = 1, ascending = true, includeTotalComments = true, record = false) {
+        try {
+            const limitResult = 10
+            
+            let acquiredPosts = { "rows": [] }
+            let pageNumberResult = 1
+
+            async function getPosts(baseURL) {
+                const response = await quickPostCMS(`${baseURL}public/post_categories/get_posts`, {
+                    "page_number": pageNumberResult,
+                    "category_slug": category_slug
+                });
+
+                if (response.status == 200) {
+                    for (const postInfo of response.data.rows) acquiredPosts.rows.push(postInfo)
+
+                    if (response.data.rows.length == limitResult) {
+                        pageNumberResult += 1
+                        return getPosts(baseURL)
+                    } else if (response.data.rows.length < limitResult) {
+                        if (response.data.rows.length == 0) pageNumberResult -= 1
+                        if (record) console.log(`[${category_slug}] Took ${pageNumberResult} page(s) to complete the list of posts (in total, ${acquiredPosts.rows.length} post(s) recorded). Sorting the lists by the post's view counter`)
+
+                        // Sort the rows/lists
+                        if (ascending) acquiredPosts.rows = acquiredPosts.rows.sort((a, b) => Number.parseInt(b.post_counter) - Number.parseInt(a.post_counter))
+                        else acquiredPosts.rows = acquiredPosts.rows.sort((a, b) => Number.parseInt(a.post_counter) - Number.parseInt(b.post_counter))
+
+                        // Slice posts by their page number specified on the parameter
+                        if (page_number > 1) acquiredPosts.rows = acquiredPosts.rows.slice(limitResult * page_number, limitResult * page_number + limitResult)
+                        else acquiredPosts.rows = acquiredPosts.rows.slice(0, limitResult)
+
+                        return buildPostRows(baseURL, acquiredPosts, includeTotalComments)
+                    }
                 }
             }
 
@@ -135,7 +180,7 @@ class Posts {
                 "page_number": page_number, 
                 "category_slug": category_slug 
             }).then((response) => {
-                return buildPostRows(this.baseURL, response.data)
+                return buildPostRows(this.baseURL, response.data, true)
             })
         } catch(err) { throw err }
     }
@@ -146,7 +191,7 @@ class Posts {
                 "page_number": page_number, 
                 "tag": tag 
             }).then((response) => {
-                return buildPostRows(this.baseURL, response.data)
+                return buildPostRows(this.baseURL, response.data, true)
             })
         } catch(err) { throw err }
     }
@@ -158,7 +203,7 @@ class Posts {
                 "year": year, 
                 "month": month 
             }).then((response) => {
-                return buildPostRows(this.baseURL, response.data)
+                return buildPostRows(this.baseURL, response.data, true)
             })
         } catch(err) { throw err }
     }
@@ -358,35 +403,38 @@ async function buildPostRows(baseURL, data, commentCount) {
     let arrayIndex = 0
     let pageNumberResult = 1
 
-    async function getComments() {
-        const response = await quickPostCMS(`${baseURL}public/post_comments/get_post_comments`, { 
-            "page_number": pageNumberResult,
-            "comment_post_id": data.rows[arrayIndex].id
-        })
-
-        if (response.status == 200) {
-            if (data.rows[arrayIndex].post_comment_count) {
-                data.rows[arrayIndex].post_comment_count += response.data.comments.length
+    async function getComments(baseURL, data) {
+        if (data.rows.length > 0) {
+            const response = await quickPostCMS(`${baseURL}public/post_comments/get_post_comments`, { 
+                "page_number": pageNumberResult,
+                "comment_post_id": data.rows[arrayIndex].id
+            })
+    
+            if (response.status == 200) {
+                if (data.rows[arrayIndex].post_comment_count) data.rows[arrayIndex].post_comment_count += response.data.comments.length
+                else data.rows[arrayIndex].post_comment_count = response.data.comments.length
+    
+                if (response.data.comments.length == limitResult) {
+                    pageNumberResult += 1
+                    return getComments(baseURL, data)
+                } else if (response.data.comments.length < limitResult) {
+                    pageNumberResult = 1
+                    data.rows[arrayIndex].post_comment_count = data.rows[arrayIndex].post_comment_count.toString()
+    
+                    if (arrayIndex < data.rows.length - 1) {
+                        arrayIndex += 1
+                        return getComments(baseURL, data)
+                    } else return data
+                }
             } else {
-                data.rows[arrayIndex].post_comment_count = response.data.comments.length
-            }
-
-            if (response.data.comments.length == limitResult) {
-                pageNumberResult += 1
-                return getComments(baseURL)
-            } else if (response.data.comments.length < limitResult) {
-                pageNumberResult = 1
-                data.rows[arrayIndex].post_comment_count = data.rows[arrayIndex].post_comment_count.toString()
+                console.log(`Failed to get total comments for Post ID of ${data.rows[arrayIndex].id}. "post_comment_count" element will be shown as "0" instead`)
+                data.rows[arrayIndex].post_comment_count = "0"
 
                 if (arrayIndex < data.rows.length - 1) {
                     arrayIndex += 1
-                } else {
-                    return data
-                }
+                    return getComments(baseURL, data)
+                } else return data
             }
-        } else {
-            console.log(`Failed to get total comments for Post ID of ${data.rows[arrayIndex].id}. "post_comment_count" element will be shown as "0" instead`)
-            data.rows[arrayIndex].post_comment_count = "0"
         }
     }
 
